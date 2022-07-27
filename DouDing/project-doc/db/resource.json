@@ -216,6 +216,13 @@
                         "request": [
                             "/file/admin/oss-append"
                         ]
+                    },
+                    {
+                        "id": "030104",
+                        "name": "其他文件上传",
+                        "request": [
+                            "/file/admin/oss-simple"
+                        ]
                     }
                 ]
             }
