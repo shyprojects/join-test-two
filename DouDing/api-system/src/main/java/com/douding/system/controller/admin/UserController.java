@@ -91,7 +91,7 @@ public class UserController {
 
         ResponseDto<LoginUserDto> responseDto = new ResponseDto<>();
 
-
+        /*
         // 根据验证码token去获取缓存中的验证码，和用户输入的验证码是否一致
         String imageCode = (String) redisTemplate.opsForValue().get(userDto.getImageCodeToken());
         LOG.info("从redis中获取到的验证码：{}", imageCode);
@@ -110,7 +110,7 @@ public class UserController {
             // 验证通过后，移除验证码
             redisTemplate.delete(userDto.getImageCodeToken());
         }
-
+        */
 
         LoginUserDto loginUserDto = userService.login(userDto);
 
