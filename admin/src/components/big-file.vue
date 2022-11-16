@@ -134,8 +134,8 @@
                 //给param对象增加一个shard参数
                 param.shard = base64;
 
-                // let url = "/file/admin/upload"
-                let url = "/file/admin/oss-append"
+                let url = "/file/admin/file/upload"
+                //let url = "/file/admin/oss-append"
                 _this.$ajax.post(url,param).then((response)=>{
                   
                    let resp = response.data;
@@ -175,7 +175,9 @@
        */
         check (param) {
           let _this = this;
-          _this.$ajax.get( '/file/admin/oss-check/' + param.key).then((response)=>{
+            let url = "/file/admin/file/check/";
+          // let url = "/file/admin/oss-check/";
+          _this.$ajax.get( url + param.key).then((response)=>{
             let resp = response.data;
             console.log("请求/file/admin/oss-check/:返回值:response"+response)
             console.log("请求/file/admin/oss-check/:返回值:response.data"+response.data)
