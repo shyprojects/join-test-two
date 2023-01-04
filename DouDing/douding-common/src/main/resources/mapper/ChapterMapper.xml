@@ -36,25 +36,64 @@
     </where>
   </sql>
   <sql id="Update_By_Example_Where_Clause">
-
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
   </sql>
   <sql id="Base_Column_List">
-
+    id, course_id, name
   </sql>
   <select id="selectByExample" parameterType="com.douding.server.domain.ChapterExample" resultMap="BaseResultMap">
-
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from chapter
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
 
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-
+    delete from chapter
+    where id = #{id,jdbcType=CHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.douding.server.domain.ChapterExample">
 
   </delete>
   <insert id="insert" parameterType="com.douding.server.domain.Chapter">
-
+    insert into chapter (id, course_id, name)
+    values (#{id,jdbcType=CHAR}, #{courseId,jdbcType=CHAR}, #{name,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.douding.server.domain.Chapter">
 
@@ -72,6 +111,9 @@
 
   </update>
   <update id="updateByPrimaryKey" parameterType="com.douding.server.domain.Chapter">
-
+    update chapter
+    set course_id = #{courseId,jdbcType=CHAR},
+        name = #{name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

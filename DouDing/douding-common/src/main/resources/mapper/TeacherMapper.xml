@@ -71,20 +71,26 @@
   <sql id="Base_Column_List">
 
   </sql>
+  <!--List<Teacher> selectByExample(TeacherExample example);-->
   <select id="selectByExample" parameterType="com.douding.server.domain.TeacherExample" resultMap="BaseResultMap">
-
+    select * from teacher
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
 
   </select>
+  <!--      int deleteByPrimaryKey(String id);-->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-
+    delete from teacher where id = #{id}
   </delete>
   <delete id="deleteByExample" parameterType="com.douding.server.domain.TeacherExample">
 
   </delete>
-  <insert id="insert" parameterType="com.douding.server.domain.Teacher">
 
+<!--      int insert(Teacher record);-->
+  <insert id="insert" parameterType="com.douding.server.domain.Teacher">
+    insert into teacher(id,name,nickname,image,position,motto,intro)
+    values
+        (#{id},#{name},#{nickname},#{image},#{position},#{motto},#{intro})
   </insert>
   <insert id="insertSelective" parameterType="com.douding.server.domain.Teacher">
 
@@ -101,7 +107,10 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.douding.server.domain.Teacher">
 
   </update>
+<!--      int updateByPrimaryKey(Teacher record);-->
   <update id="updateByPrimaryKey" parameterType="com.douding.server.domain.Teacher">
-
+    update teacher set name = #{name},nickname = #{nickname},image = #{image},
+                       position = #{position},motto = #{motto},intro = #{motto}
+    where id = #{id}
   </update>
 </mapper>

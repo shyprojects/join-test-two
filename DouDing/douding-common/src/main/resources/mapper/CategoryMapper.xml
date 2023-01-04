@@ -68,6 +68,7 @@
   <sql id="Base_Column_List">
     id, parent, `name`, sort
   </sql>
+<!--      List<Category> selectByExample(CategoryExample example);-->
   <select id="selectByExample" parameterType="com.douding.server.domain.CategoryExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

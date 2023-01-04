@@ -12,6 +12,7 @@ import com.douding.server.util.CopyUtil;
 import com.douding.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import io.netty.util.internal.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,6 +20,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -42,27 +44,43 @@ public class TeacherService {
     }
 
     public void save(TeacherDto teacherDto) {
-
-
+        Teacher teacher = CopyUtil.copy(teacherDto, Teacher.class);
+        if(teacherDto.getId() == null || "".equals(teacherDto.getId())){
+            insert(teacher);
+            return;
+        }
+        update(teacher);
     }
 
     //新增数据
     private void insert(Teacher teacher) {
-
-
+        teacher.setId(UUID.randomUUID().toString().substring(0,8));
+        int i = teacherMapper.insert(teacher);
+        if (i == 0){
+            throw new RuntimeException();
+        }
     }
 
     //更新数据
     private void update(Teacher teacher) {
-
+        int i = teacherMapper.updateByPrimaryKey(teacher);
+        if (i == 0){
+            throw new RuntimeException();
+        }
     }
 
     public void delete(String id) {
-
+        int i = teacherMapper.deleteByPrimaryKey(id);
+        if (i == 0){
+            throw new RuntimeException();
+        }
     }
 
     public List<TeacherDto> all() {
-       return null;
+        TeacherExample teacherExample = new TeacherExample();
+        List<Teacher> teacherList = teacherMapper.selectByExample(teacherExample);
+        List<TeacherDto> teacherDtoList = CopyUtil.copyList(teacherList, TeacherDto.class);
+        return teacherDtoList;
     }
 
 

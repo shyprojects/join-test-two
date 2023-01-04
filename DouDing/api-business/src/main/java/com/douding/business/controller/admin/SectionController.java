@@ -29,22 +29,37 @@ public class SectionController {
 
     @RequestMapping("/list")
     public ResponseDto list(SectionPageDto pageSectionDto){
-
-
-        return null;
+        sectionService.list(pageSectionDto);
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setSuccess(true);
+        responseDto.setContent(pageSectionDto);
+        return responseDto;
     }
 
     @PostMapping("/save")
     public ResponseDto save(@RequestBody SectionDto sectionDto){
-
-
-        return null;
+        ResponseDto responseDto = new ResponseDto();
+        try {
+            sectionService.save(sectionDto);
+            responseDto.setSuccess(true);
+        } catch (Exception e) {
+            responseDto.setSuccess(false);
+            return responseDto;
+        }
+        return responseDto;
     }
     
     @DeleteMapping("/delete/{id}")
     public ResponseDto delete(@PathVariable String id){
-
-        return null;
+        ResponseDto responseDto = new ResponseDto();
+        try {
+            sectionService.delete(id);
+            responseDto.setSuccess(true);
+        } catch (Exception e) {
+            responseDto.setSuccess(false);
+            return responseDto;
+        }
+        return responseDto;
     }
 
 }//end class

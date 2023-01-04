@@ -14,28 +14,105 @@
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
   </resultMap>
   <sql id="Example_Where_Clause">
-
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
   </sql>
   <sql id="Update_By_Example_Where_Clause">
-
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
   </sql>
   <sql id="Base_Column_List">
-
+    id, title, course_id, chapter_id, video, time, charge, sort, created_at, updated_at
   </sql>
   <select id="selectByExample" parameterType="com.douding.server.domain.SectionExample" resultMap="BaseResultMap">
-
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from section
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-
+    select
+    <include refid="Base_Column_List" />
+    from section
+    where id = #{id,jdbcType=CHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-
+    delete from section
+    where id = #{id,jdbcType=CHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.douding.server.domain.SectionExample">
-
+    delete from section
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
   </delete>
   <insert id="insert" parameterType="com.douding.server.domain.Section">
-
+    insert into section (id, title, course_id,
+                         chapter_id, video, time,
+                         charge, sort, created_at,
+                         updated_at)
+    values (#{id,jdbcType=CHAR}, #{title,jdbcType=VARCHAR}, #{courseId,jdbcType=CHAR},
+            #{chapterId,jdbcType=CHAR}, #{video,jdbcType=VARCHAR}, #{time,jdbcType=INTEGER},
+            #{charge,jdbcType=CHAR}, #{sort,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP},
+            #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.douding.server.domain.Section">
 
@@ -47,12 +124,35 @@
 
   </update>
   <update id="updateByExample" parameterType="map">
-
+    update section
+    set id = #{record.id,jdbcType=CHAR},
+    title = #{record.title,jdbcType=VARCHAR},
+    course_id = #{record.courseId,jdbcType=CHAR},
+    chapter_id = #{record.chapterId,jdbcType=CHAR},
+    video = #{record.video,jdbcType=VARCHAR},
+    time = #{record.time,jdbcType=INTEGER},
+    charge = #{record.charge,jdbcType=CHAR},
+    sort = #{record.sort,jdbcType=INTEGER},
+    created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+    updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.douding.server.domain.Section">
 
   </update>
   <update id="updateByPrimaryKey" parameterType="com.douding.server.domain.Section">
-
+    update section
+    set title = #{title,jdbcType=VARCHAR},
+        course_id = #{courseId,jdbcType=CHAR},
+        chapter_id = #{chapterId,jdbcType=CHAR},
+        video = #{video,jdbcType=VARCHAR},
+        time = #{time,jdbcType=INTEGER},
+        charge = #{charge,jdbcType=CHAR},
+        sort = #{sort,jdbcType=INTEGER},
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

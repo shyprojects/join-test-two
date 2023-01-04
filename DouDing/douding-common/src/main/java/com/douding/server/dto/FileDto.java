@@ -1,7 +1,6 @@
 package com.douding.server.dto;
-
-        import java.util.Date;
-        import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class FileDto {
 

@@ -3,6 +3,7 @@ package com.douding.server.service;
 import com.douding.server.domain.Course;
 import com.douding.server.domain.CourseContent;
 import com.douding.server.domain.CourseExample;
+import com.douding.server.domain.Teacher;
 import com.douding.server.dto.*;
 import com.douding.server.enums.CourseStatusEnum;
 import com.douding.server.mapper.CourseContentMapper;
@@ -26,6 +27,7 @@ import java.util.List;
 
 
 import java.util.Date;
+import java.util.UUID;
 
 
 @Service
@@ -62,27 +64,53 @@ public class CourseService {
      * @param pageDto
      */
     public void list(CoursePageDto pageDto) {
-
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        CourseExample courseExample = new CourseExample();
+        List<Course> courses = courseMapper.selectByExample(courseExample);
+        PageInfo<Course> pageInfo = new PageInfo<>(courses);
+        pageDto.setTotal(pageInfo.getTotal());
+        List<CourseDto> courseDtoList = CopyUtil.copyList(courses, CourseDto.class);
+        pageDto.setList(courseDtoList);
     }
 
 
     public void save(CourseDto courseDto) {
-
+        Course course = CopyUtil.copy(courseDto, Course.class);
+        if(courseDto.getId() == null || "".equals(courseDto.getId())){
+            insert(course);
+            return;
+        }
+        update(course);
     }
 
     //新增数据
     private void insert(Course course) {
-
-
+        String id = UUID.randomUUID().toString().substring(0, 8);
+        Date date = new Date();
+        course.setCreatedAt(date);
+        course.setUpdatedAt(date);
+        course.setId(id);
+        System.err.println(course);
+        int i = courseMapper.insert(course);
+        if (i == 0){
+            throw new RuntimeException();
+        }
     }
 
     //更新数据
     private void update(Course course) {
-
+        course.setUpdatedAt(new Date());
+        int i = courseMapper.updateByPrimaryKey(course);
+        if (i == 0){
+            throw new RuntimeException();
+        }
     }
 
     public void delete(String id) {
-
+        int i = courseMapper.deleteByPrimaryKey(id);
+        if (i == 0){
+            throw new RuntimeException();
+        }
     }
 
     //更新课程时长
@@ -98,13 +126,16 @@ public class CourseService {
 
     //新增内容 或者修改内容
     public int saveContent(CourseContentDto contentDto) {
-
-        return 0;
+        CourseContent cCourseContent = CopyUtil.copy(contentDto, CourseContent.class);
+        int i = courseContentMapper.insert(cCourseContent);
+        if (i == 0){
+            throw new RuntimeException();
+        }
+        return i;
     }
 
 
     public void sort(SortDto sortDto){
-
     }
     /**
      * 查找某一课程，供web模块用，只能查已发布的

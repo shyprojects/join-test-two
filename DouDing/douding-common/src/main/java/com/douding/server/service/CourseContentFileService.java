@@ -29,7 +29,6 @@ public class CourseContentFileService {
      * 列表查询
      */
     public List<CourseContentFileDto> list(String courseId) {
-
         CourseContentFileExample example = new CourseContentFileExample();
         CourseContentFileExample.Criteria criteria = example.createCriteria();
         criteria.andCourseIdEqualTo(courseId);
@@ -38,7 +37,6 @@ public class CourseContentFileService {
     }
 
     public void save(CourseContentFileDto courseContentFileDto) {
-
         CourseContentFile courseContentFile = CopyUtil.copy(courseContentFileDto, CourseContentFile.class);
 
         //判断是新增 还是修改
@@ -47,23 +45,29 @@ public class CourseContentFileService {
         } else {
             this.update(courseContentFile);
         }
-
     }
 
     //新增数据
     private void insert(CourseContentFile courseContentFile) {
-
-
         courseContentFile.setId(UuidUtil.getShortUuid());
-        courseContentFileMapper.insert(courseContentFile);
+        int i = courseContentFileMapper.insert(courseContentFile);
+        if (i == 0){
+            throw new RuntimeException();
+        }
     }
 
     //更新数据
     private void update(CourseContentFile courseContentFile) {
-        courseContentFileMapper.updateByPrimaryKey(courseContentFile);
+        int i = courseContentFileMapper.updateByPrimaryKey(courseContentFile);
+        if (i == 0){
+            throw new RuntimeException();
+        }
     }
 
     public void delete(String id) {
-        courseContentFileMapper.deleteByPrimaryKey(id);
+        int i = courseContentFileMapper.deleteByPrimaryKey(id);
+        if (i == 0){
+            throw new RuntimeException();
+        }
     }
 }//end class

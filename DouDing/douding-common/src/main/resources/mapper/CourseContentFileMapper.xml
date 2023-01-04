@@ -69,6 +69,7 @@
   <sql id="Base_Column_List">
     id, course_id, url, `name`, `size`
   </sql>
+<!--      List<CourseContentFile> selectByExample(CourseContentFileExample example);-->
   <select id="selectByExample" parameterType="com.douding.server.domain.CourseContentFileExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

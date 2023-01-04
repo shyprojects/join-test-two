@@ -29,26 +29,46 @@ public class TeacherController {
 
     @RequestMapping("/list")
     public ResponseDto list(PageDto pageDto){
-        return null;
+        teacherService.list(pageDto);
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setSuccess(true);
+        responseDto.setContent(pageDto);
+        return responseDto;
     }
 
     @PostMapping("/save")
     public ResponseDto save(@RequestBody TeacherDto teacherDto){
-
-        return null;
+        ResponseDto responseDto = new ResponseDto();
+        try {
+            teacherService.save(teacherDto);
+            responseDto.setSuccess(true);
+        } catch (Exception e) {
+            responseDto.setSuccess(false);
+            return responseDto;
+        }
+        return responseDto;
     }
     
     @DeleteMapping("/delete/{id}")
     public ResponseDto delete(@PathVariable String id){
-
-        return null;
+        ResponseDto responseDto = new ResponseDto();
+        try {
+            teacherService.delete(id);
+            responseDto.setSuccess(true);
+        } catch (Exception e) {
+            responseDto.setSuccess(false);
+            return responseDto;
+        }
+        return responseDto;
     }
 
     @RequestMapping("/all")
     public ResponseDto all(){
-
-
-        return null;
+        List<TeacherDto> list = teacherService.all();
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setSuccess(true);
+        responseDto.setContent(list);
+        return responseDto;
     }
 
 }//end class

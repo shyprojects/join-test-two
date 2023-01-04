@@ -46,22 +46,31 @@ public class UploadController {
 
     @RequestMapping("/upload")
     public ResponseDto upload(@RequestBody FileDto fileDto) throws Exception {
-
-
-        return null;
+        fileService.save(fileDto);
+        MultipartFile multipartFile = Base64ToMultipartFile.base64ToMultipart(fileDto.getShard());
+        File file = new File(FILE_PATH);
+        if (!file.exists()){
+            file.mkdirs();
+        }
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setSuccess(true);
+        responseDto.setContent("content");
+        responseDto.setMessage("msg");
+        responseDto.setCode("code");
+        return responseDto;
     }
 
     //合并分片
     public void merge(FileDto fileDto) throws Exception {
         LOG.info("合并分片开始");
-
     }
 
     @GetMapping("/check/{key}")
     public ResponseDto check(@PathVariable String key) throws Exception {
         LOG.info("检查上传分片开始：{}", key);
-
-        return null;
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setSuccess(true);
+        return responseDto;
     }
 
 }//end class

@@ -26,20 +26,26 @@
   <sql id="Base_Column_List">
 
   </sql>
+<!--      List<Course> selectByExample(CourseExample example);-->
   <select id="selectByExample" parameterType="com.douding.server.domain.CourseExample" resultMap="BaseResultMap">
-
+    select * from course
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
 
   </select>
+  <!--      int deleteByPrimaryKey(String id);-->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-
+    delete from course where id = #{id}
   </delete>
   <delete id="deleteByExample" parameterType="com.douding.server.domain.CourseExample">
 
   </delete>
+<!--      int insert(Course record);-->
   <insert id="insert" parameterType="com.douding.server.domain.Course">
-
+    insert into course
+    (id,name,summary,time,price,image,level,charge,status,enroll,sort,created_at,updated_at,teacher_id)
+    values
+    (#{id},#{name},#{summary},#{time},#{price},#{image},#{level},#{charge},#{status},#{enroll},#{sort},#{createdAt},#{updatedAt},#{teacherId})
   </insert>
   <insert id="insertSelective" parameterType="com.douding.server.domain.Course">
 
@@ -58,6 +64,9 @@
 
   </update>
   <update id="updateByPrimaryKey" parameterType="com.douding.server.domain.Course">
-
+    update course set name = #{name},summary = #{summary},time = #{time},price = #{price},image = #{image},
+      level = #{level},charge = #{charge},status = #{status},enroll = #{enroll},sort = #{sort},created_at = #{createdAt},
+      updated_at = #{updatedAt},teacher_id = #{teacherId}
+    where id = #{id}
   </update>
 </mapper>

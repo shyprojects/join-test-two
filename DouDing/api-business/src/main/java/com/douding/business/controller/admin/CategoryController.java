@@ -30,7 +30,6 @@ public class CategoryController {
     //条件查询
     @RequestMapping("/list")
     public ResponseDto list(PageDto pageDto){
-
         ResponseDto<PageDto> responseDto = new ResponseDto<>();
         categoryService.list(pageDto);
         responseDto.setContent(pageDto);
@@ -40,7 +39,7 @@ public class CategoryController {
     //查询所有数据
     @RequestMapping("/all")
     public ResponseDto all(){
-
+        System.err.println("----------");
         ResponseDto responseDto = new ResponseDto();
         List<CategoryDto> categoryDtoList = categoryService.all();
         responseDto.setContent(categoryDtoList);
@@ -61,7 +60,6 @@ public class CategoryController {
     
     @DeleteMapping("/delete/{id}")
     public ResponseDto delete(@PathVariable String id){
-
         ResponseDto<CategoryDto> responseDto = new ResponseDto<>();
         categoryService.delete(id);
         return responseDto;

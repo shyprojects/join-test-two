@@ -43,7 +43,7 @@ spring:
             - name: LoginAdmin
             - StripPrefix=0
   redis:
-    host: 192.168.38.130
+    host: 39.101.74.75
     port: 6379
     password: html
 

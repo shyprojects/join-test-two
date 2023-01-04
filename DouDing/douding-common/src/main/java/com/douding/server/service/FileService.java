@@ -65,6 +65,13 @@ public class FileService {
         file.setUpdatedAt(now);
 
         file.setId(UuidUtil.getShortUuid());
+        if ("T".equals(file.getUse())){
+            file.setPath("teacher/" + file.getKey() + "." + file.getSuffix());
+        }else if("C".equals(file.getUse())){
+            file.setPath("course/" + file.getKey() + "." + file.getSuffix());
+        }else {
+            file.setPath("teachers/" + file.getKey() + "." + file.getSuffix());
+        }
         fileMapper.insert(file);
     }
 
