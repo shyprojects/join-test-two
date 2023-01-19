@@ -13,7 +13,7 @@ public class SpingMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
     //所有带/f/ 都认为是静态资源文件
-        registry.addResourceHandler("/f/**").addResourceLocations("file:"+FILE_PATH);
+        registry.addResourceHandler("/f/**").addResourceLocations("file:" + FILE_PATH);
     //例如: http://127.0.0.1:9003/file/f/teachers/fCY6376B-1.jpeg
         //浏览器输入 就可以看到图片了
     }

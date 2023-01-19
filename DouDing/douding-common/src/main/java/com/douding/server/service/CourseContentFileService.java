@@ -38,7 +38,6 @@ public class CourseContentFileService {
 
     public void save(CourseContentFileDto courseContentFileDto) {
         CourseContentFile courseContentFile = CopyUtil.copy(courseContentFileDto, CourseContentFile.class);
-
         //判断是新增 还是修改
         if (StringUtils.isEmpty(courseContentFileDto.getId())) {
             this.insert(courseContentFile);

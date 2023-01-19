@@ -14,8 +14,6 @@ import org.springframework.core.env.Environment;
 @ComponentScan("com.douding")
 @MapperScan("com.douding.server.mapper")
 public class BusinessApplication {
-
-
 	private static final Logger LOG = LoggerFactory.getLogger(BusinessApplication.class);
 
 	public static void main(String[] args) {
@@ -24,5 +22,4 @@ public class BusinessApplication {
 		LOG.info("启动成功！！");
 		LOG.info("Business: \thttp://127.0.0.1:{}", env.getProperty("server.port"));
 	}
-
 }

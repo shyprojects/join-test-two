@@ -15,7 +15,6 @@ public class TestService {
     private TestMapper testMapper;
 
     public List<Test> list(){
-
         TestExample testExample = new TestExample();
         testExample.createCriteria().andIdEqualTo("1");
         return testMapper.selectByExample(testExample);

@@ -55,12 +55,12 @@ public class CourseService {
     private SectionService sectionService;
 
 
-
     private static final Logger LOG = LoggerFactory.getLogger(CourseService.class);
 
 
     /**
      * 列表查询：关联课程分类表 web接口
+     *
      * @param pageDto
      */
     public void list(CoursePageDto pageDto) {
@@ -70,13 +70,16 @@ public class CourseService {
         PageInfo<Course> pageInfo = new PageInfo<>(courses);
         pageDto.setTotal(pageInfo.getTotal());
         List<CourseDto> courseDtoList = CopyUtil.copyList(courses, CourseDto.class);
+        courseDtoList.sort((c1,c2) -> {
+            return c1.getSort().compareTo(c2.getSort());
+        });
         pageDto.setList(courseDtoList);
     }
 
 
     public void save(CourseDto courseDto) {
         Course course = CopyUtil.copy(courseDto, Course.class);
-        if(courseDto.getId() == null || "".equals(courseDto.getId())){
+        if (courseDto.getId() == null || "".equals(courseDto.getId())) {
             insert(course);
             return;
         }
@@ -92,7 +95,7 @@ public class CourseService {
         course.setId(id);
         System.err.println(course);
         int i = courseMapper.insert(course);
-        if (i == 0){
+        if (i == 0) {
             throw new RuntimeException();
         }
     }
@@ -101,44 +104,54 @@ public class CourseService {
     private void update(Course course) {
         course.setUpdatedAt(new Date());
         int i = courseMapper.updateByPrimaryKey(course);
-        if (i == 0){
+        if (i == 0) {
             throw new RuntimeException();
         }
     }
 
     public void delete(String id) {
         int i = courseMapper.deleteByPrimaryKey(id);
-        if (i == 0){
+        if (i == 0) {
             throw new RuntimeException();
         }
     }
 
     //更新课程时长
-    public void updateTime(@Param("courseId")String courseId){
+    public void updateTime(@Param("courseId") String courseId) {
 
     }
 
     //课程内容相关的操作 查找 新增,修改
     public CourseContentDto findContent(String id) {
-
-        return null;
+        CourseContent courseContent = courseContentMapper.selectByPrimaryKey(id);
+        CourseContentDto courseContentDto = CopyUtil.copy(courseContent, CourseContentDto.class);
+        return courseContentDto;
     }
 
     //新增内容 或者修改内容
     public int saveContent(CourseContentDto contentDto) {
-        CourseContent cCourseContent = CopyUtil.copy(contentDto, CourseContent.class);
-        int i = courseContentMapper.insert(cCourseContent);
-        if (i == 0){
-            throw new RuntimeException();
+        CourseContent courseContent = courseContentMapper.selectByPrimaryKey(contentDto.getId());
+        CourseContent content = CopyUtil.copy(contentDto, CourseContent.class);
+        int i = 0;
+        if (courseContent == null) {
+            i = courseContentMapper.insert(content);
+        } else {
+            i = courseContentMapper.updateByPrimaryKeySelective(content);
         }
         return i;
     }
 
 
-    public void sort(SortDto sortDto){
+    public void sort(SortDto sortDto) {
+        Course course = new Course();
+        course.setId(sortDto.getId());
+        course.setSort(sortDto.getNewSort());
+        courseMapper.updateByPrimaryKeySelective(course);
     }
+
     /**
      * 查找某一课程，供web模块用，只能查已发布的
+     *
      * @param id
      * @return
      */
@@ -154,7 +167,6 @@ public class CourseService {
 
         return null;
     }
-
 
 
 }//end class

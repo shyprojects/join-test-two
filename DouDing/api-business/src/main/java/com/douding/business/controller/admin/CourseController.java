@@ -9,9 +9,9 @@ import com.douding.server.service.CourseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 
 @RestController
@@ -58,6 +58,7 @@ public class CourseController {
     
     @DeleteMapping("/delete/{id}")
     public ResponseDto delete(@PathVariable String id){
+
         ResponseDto responseDto = new ResponseDto();
         try {
             courseService.delete(id);
@@ -85,11 +86,10 @@ public class CourseController {
         ResponseDto responseDto = new ResponseDto();
         try {
             int i = courseService.saveContent(contentDto);
-            responseDto.setSuccess(true);
         } catch (Exception e) {
-            responseDto.setSuccess(false);
-            return responseDto;
+            throw new RuntimeException(e);
         }
+        responseDto.setSuccess(true);
         return responseDto;
     }
 

@@ -5,16 +5,20 @@ import com.douding.server.domain.FileExample;
 import com.douding.server.dto.FileDto;
 import com.douding.server.dto.PageDto;
 import com.douding.server.mapper.FileMapper;
+import com.douding.server.util.Base64ToMultipartFile;
 import com.douding.server.util.CopyUtil;
 import com.douding.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,20 +45,26 @@ public class FileService {
         pageDto.setList(fileDtoList);
     }
 
-    public void save(FileDto fileDto) {
-
+    public void save(FileDto fileDto) throws IOException {
         File file = CopyUtil.copy(fileDto, File.class);
         //根据key值去数据库查询File
         File fileDb = selectByKey(fileDto.getKey());
         //判断是新增 还是修改
         if (fileDb == null) {
+            if ("T".equals(file.getUse())){
+                file.setPath("teacher/" + file.getKey() + "." + file.getSuffix());
+            }else if("C".equals(file.getUse())){
+                file.setPath("course/" + file.getKey() + "." + file.getSuffix());
+            }else {
+                file.setPath("teachers/" + file.getKey() + "." + file.getSuffix());
+            }
+            fileDto.setPath(file.getPath());
             this.insert(file);
         } else {
             //如果是更新的话 先更改文件的ShardIndex属性 在update
             fileDb.setShardIndex(fileDto.getShardIndex());
             this.update(fileDb);
         }
-
     }
 
     //新增数据
@@ -65,13 +75,7 @@ public class FileService {
         file.setUpdatedAt(now);
 
         file.setId(UuidUtil.getShortUuid());
-        if ("T".equals(file.getUse())){
-            file.setPath("teacher/" + file.getKey() + "." + file.getSuffix());
-        }else if("C".equals(file.getUse())){
-            file.setPath("course/" + file.getKey() + "." + file.getSuffix());
-        }else {
-            file.setPath("teachers/" + file.getKey() + "." + file.getSuffix());
-        }
+
         fileMapper.insert(file);
     }
 

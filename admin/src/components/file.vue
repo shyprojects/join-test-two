@@ -66,7 +66,7 @@ export default {
             formData.append("use",_this.use);//文件分类 (课程图,讲师头像)
             Loading.show();
             // let url = "/file/admin/upload"
-            let url = "/file/admin/oss-simple"
+            let url = "/file/admin/file/content/upload"
             _this.$ajax.post(url,formData).then((response)=>{
                 Loading.hide();
                 let image = response.data.content;
